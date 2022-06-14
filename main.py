@@ -29,6 +29,11 @@ class Window:
         for i in range(1, 4):
             pygame.draw.line(self.screen, (255, 255, 255), (0, i*self.size/3), (self.size, i*self.size/3))
             pygame.draw.line(self.screen, (255, 255, 255), (i*self.size/3, 0), (i*self.size/3, self.size))
+        for i in range(9):
+            if self.board.board[i] == 1:
+                self.draw_x(i)
+            elif self.board.board[i] == 2:
+                self.draw_o(i)
        
     def run(self):
         while True:
