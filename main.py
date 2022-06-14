@@ -63,6 +63,14 @@ class Window:
                         if not self.won[0]:
                             self.board.place(event.key - 49)
                             self.won = self.board.check_winner()
+                elif event.type == pygame.MOUSEBUTTONUP:
+                    if not self.won[0]:
+                        pos = pygame.mouse.get_pos()
+                        coord = (pos[0]//(self.size/3), pos[1]//(self.size/3))
+                        coord_to_num = {(0, 0): 0, (1, 0): 1, (2, 0): 2, (0, 1): 3, (1, 1): 4, (2, 1): 5, (0, 2): 6, (1, 2): 7, (2, 2): 8}
+                        if coord in coord_to_num.keys():
+                            self.board.place(coord_to_num[coord])
+                            self.won = self.board.check_winner()
             
             self.draw_grid()
             pygame.display.update()
