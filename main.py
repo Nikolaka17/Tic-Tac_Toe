@@ -13,6 +13,21 @@ class Window:
         #general setup
         self.size = size
         self.board = Board()
+        self.won = (False, (-1, -1, -1), "N")
+    
+    def draw_winner(self, line, type):
+        num_to_coord = {0: (0, 0), 1: (1, 0), 2: (2, 0), 3: (0, 1), 4: (1, 1), 5: (2, 1), 6: (0, 2), 7: (1, 2), 8: (2, 2)}
+        start = num_to_coord[line[0]]
+        end = num_to_coord[line[-1]]
+        if type == "D":
+            if line[0] == 0 and line[2] == 8:
+                pygame.draw.line(self.screen, (0,255,0), (0,0), (self.size, self.size), width=10)
+            elif line[0] == 2 and line[2] == 6:
+                pygame.draw.line(self.screen, (0,255,0), (self.size,0), (0, self.size), width=10)
+        elif type == "H":
+            pygame.draw.line(self.screen, (0, 255, 0), (0, (start[1]*self.size/3) + self.size/6), (self.size, (start[1]*self.size/3) + self.size/6), width=10)
+        elif type == "V":
+            pygame.draw.line(self.screen, (0, 255, 0), ((start[0]*self.size/3) + self.size/6, 0), ((start[0]*self.size/3) + self.size/6, self.size), width=10)
     
     def draw_x(self, pos):
         num_to_coord = {0: (0, 0), 1: (1, 0), 2: (2, 0), 3: (0, 1), 4: (1, 1), 5: (2, 1), 6: (0, 2), 7: (1, 2), 8: (2, 2)} #translates from matrix to array
@@ -34,6 +49,8 @@ class Window:
                 self.draw_x(i)
             elif self.board.board[i] == 2:
                 self.draw_o(i)
+        if self.won[0]:
+            self.draw_winner(self.won[1], self.won[2])
        
     def run(self):
         while True:
@@ -41,6 +58,9 @@ class Window:
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     exit()
+                elif event.type == pygame.KEYDOWN:
+                    if event.key in (pygame.K_1, pygame.K_2, pygame.K_3, pygame.K_4, pygame.K_5, pygame.K_6, pygame.K_7, pygame.K_8, pygame.K_9):
+                        self.win = self.board.place(event.key - 49)
             
             self.draw_grid()
             pygame.display.update()

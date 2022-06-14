@@ -9,23 +9,23 @@ class Board:
         for i in range(3):
             if self.board[i*3] == self.board[i*3 + 1] == self.board[i*3 + 2] != 0:
                 self.winner = self.board[i*3]
-                return True, (i*3, i*3 + 1, i*3 + 2)
+                return True, (i*3, i*3 + 1, i*3 + 2), "H"
         
         #check columns
         for i in range(3):
             if self.board[i] == self.board[i + 3] == self.board[i + 6] != 0:
                 self.winner = self.board[i]
-                return True, (i, i + 3, i + 6)
+                return True, (i, i + 3, i + 6), "V"
         
         #check diagonals
         if self.board[0] == self.board[4] == self.board[8] != 0:
             self.winner = self.board[0]
-            return True, (0, 4, 8)
+            return True, (0, 4, 8), "D"
         if self.board[2] == self.board[4] == self.board[6] != 0:
             self.winner = self.board[2]
-            return True, (2, 4, 6)
+            return True, (2, 4, 6), "D"
 
-        return False, (-1, -1, -1)
+        return False, (-1, -1, -1), "N"
     
     def find_empty(self):
         for i in range(9):
@@ -38,4 +38,4 @@ class Board:
             self.turn = 3 - self.turn
             status = self.check_winner()
             if status[0]:
-                return True, status[1]
+                return True, status[1], status[2]
