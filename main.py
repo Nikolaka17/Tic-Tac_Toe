@@ -1,6 +1,7 @@
 import pygame
 from sys import exit
 from board import Board
+from math import pi
 
 class Window:
     def __init__(self, size):
@@ -18,7 +19,6 @@ class Window:
     def draw_winner(self, line, type):
         num_to_coord = {0: (0, 0), 1: (1, 0), 2: (2, 0), 3: (0, 1), 4: (1, 1), 5: (2, 1), 6: (0, 2), 7: (1, 2), 8: (2, 2)}
         start = num_to_coord[line[0]]
-        end = num_to_coord[line[-1]]
         if type == "D":
             if line[0] == 0 and line[2] == 8:
                 pygame.draw.line(self.screen, (0,255,0), (0,0), (self.size, self.size), width=10)
@@ -38,7 +38,7 @@ class Window:
     def draw_o(self, pos):
         num_to_coord = {0: (0, 0), 1: (1, 0), 2: (2, 0), 3: (0, 1), 4: (1, 1), 5: (2, 1), 6: (0, 2), 7: (1, 2), 8: (2, 2)}
         coord = num_to_coord[pos]
-        pygame.draw.circle(self.screen, (0, 0, 255), (coord[0]*self.size/3 + self.size/6, coord[1]*self.size/3 + self.size/6), self.size/6 - 8)
+        pygame.draw.circle(self.screen, (0, 0, 255), (coord[0]*self.size/3 + self.size/6, coord[1]*self.size/3 + self.size/6), self.size/6 - 8, width=10)
     
     def draw_grid(self):
         for i in range(1, 4):
@@ -60,7 +60,9 @@ class Window:
                     exit()
                 elif event.type == pygame.KEYDOWN:
                     if event.key in (pygame.K_1, pygame.K_2, pygame.K_3, pygame.K_4, pygame.K_5, pygame.K_6, pygame.K_7, pygame.K_8, pygame.K_9):
-                        self.win = self.board.place(event.key - 49)
+                        if not self.won[0]:
+                            self.board.place(event.key - 49)
+                            self.won = self.board.check_winner()
             
             self.draw_grid()
             pygame.display.update()

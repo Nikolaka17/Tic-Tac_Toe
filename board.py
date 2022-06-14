@@ -36,6 +36,3 @@ class Board:
         if self.board[pos] == 0:
             self.board[pos] = self.turn
             self.turn = 3 - self.turn
-            status = self.check_winner()
-            if status[0]:
-                return True, status[1], status[2]
