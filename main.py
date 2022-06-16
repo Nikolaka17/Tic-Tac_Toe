@@ -15,6 +15,7 @@ class Window:
         self.size = size
         self.board = Board()
         self.won = (False, (-1, -1, -1), "N")
+        self.auto = True
     
     def draw_winner(self, line, type):
         num_to_coord = {0: (0, 0), 1: (1, 0), 2: (2, 0), 3: (0, 1), 4: (1, 1), 5: (2, 1), 6: (0, 2), 7: (1, 2), 8: (2, 2)}
@@ -63,6 +64,14 @@ class Window:
                         if not self.won[0]:
                             self.board.place(event.key - 49)
                             self.won = self.board.check_winner()
+                            self.draw_grid()
+                            pygame.display.update()
+                            if not self.won[0] and self.board.turn == 2 and self.auto:
+                                move = self.board.minimax(self.board.board, 10, True)[0]
+                                if move != None:
+                                    self.board.place(move)
+                                self.won = self.board.check_winner()
+
                 elif event.type == pygame.MOUSEBUTTONUP:
                     if not self.won[0]:
                         pos = pygame.mouse.get_pos()
@@ -71,6 +80,13 @@ class Window:
                         if coord in coord_to_num.keys():
                             self.board.place(coord_to_num[coord])
                             self.won = self.board.check_winner()
+                            self.draw_grid()
+                            pygame.display.update()
+                            if not self.won[0] and self.board.turn == 2 and self.auto:
+                                move = self.board.minimax(self.board.board, 10, True)[0]
+                                if move != None:
+                                    self.board.place(move)
+                                self.won = self.board.check_winner()
             
             self.draw_grid()
             pygame.display.update()

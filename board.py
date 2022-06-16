@@ -92,4 +92,4 @@ class Board:
                 if new_score < min_score:
                     min_score = new_score
                     best_move = move
-            return best_move, max_score
+            return best_move, min_score
