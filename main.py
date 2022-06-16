@@ -1,7 +1,6 @@
 import pygame
 from sys import exit
 from board import Board
-from math import pi
 
 class Window:
     def __init__(self, size):
@@ -93,5 +92,8 @@ class Window:
             self.clock.tick(60)
 
 if __name__ == "__main__":
+    mode = str(input("How many players? (1 or 2) "))
     window = Window(900)
+    if mode == "2":
+        window.auto = False
     window.run()
