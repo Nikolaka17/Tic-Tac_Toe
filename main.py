@@ -1,6 +1,7 @@
 import pygame
 from sys import exit
 from board import Board
+from random import choice
 
 class Window:
     def __init__(self, size):
@@ -41,6 +42,7 @@ class Window:
         pygame.draw.circle(self.screen, (0, 0, 255), (coord[0]*self.size/3 + self.size/6, coord[1]*self.size/3 + self.size/6), self.size/6 - 8, width=10)
     
     def draw_grid(self):
+        self.screen.fill((0,0,0))
         for i in range(1, 4):
             pygame.draw.line(self.screen, (255, 255, 255), (0, i*self.size/3), (self.size, i*self.size/3))
             pygame.draw.line(self.screen, (255, 255, 255), (i*self.size/3, 0), (i*self.size/3, self.size))
@@ -51,6 +53,15 @@ class Window:
                 self.draw_o(i)
         if self.won[0]:
             self.draw_winner(self.won[1], self.won[2])
+    
+    def reset(self):
+        self.board = Board()
+        self.won = (False, (-1, -1, -1), "N")
+        if self.auto:
+            if choice([True, False]):
+                self.board.turn = 2
+                self.board.place(self.board.minimax(self.board.board, 10, True)[1])
+        self.draw_grid()
        
     def run(self):
         while True:
@@ -70,6 +81,11 @@ class Window:
                                 if move != None:
                                     self.board.place(move)
                                 self.won = self.board.check_winner()
+                            if self.won[0] or 0 not in self.board.board:
+                                print("Game finished. Press r to play again")
+                        
+                    elif event.key == pygame.K_r:
+                        self.reset()
 
                 elif event.type == pygame.MOUSEBUTTONUP:
                     if not self.won[0]:
@@ -86,6 +102,8 @@ class Window:
                                 if move != None:
                                     self.board.place(move)
                                 self.won = self.board.check_winner()
+                        if self.won[0] or 0 not in self.board.board:
+                            print("Game finished. Press r to play again")
             
             self.draw_grid()
             pygame.display.update()
